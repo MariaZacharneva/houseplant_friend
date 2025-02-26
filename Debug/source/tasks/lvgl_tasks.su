@@ -1,0 +1,14 @@
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers/fsl_iomuxc.h:1272:20:IOMUXC_SetPinMux	24	static
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers/fsl_iomuxc.h:1304:20:IOMUXC_SetPinConfig	24	static
+C:/Users/Masha/OneDrive/university/thesis/mxp_hello_world_2_lvgl/evkmimxrt1064/lvgl_demo_widgets/lvgl/lvgl/src/misc/lv_area.h:295:26:lv_pct	16	static
+C:/Users/Masha/OneDrive/university/thesis/mxp_hello_world_2_lvgl/evkmimxrt1064/lvgl_demo_widgets/lvgl/lvgl/src/misc/lv_color.h:595:26:lv_color_make	16	static
+C:/Users/Masha/OneDrive/university/thesis/mxp_hello_world_2_lvgl/evkmimxrt1064/lvgl_demo_widgets/lvgl/lvgl/src/misc/lv_color.h:700:26:lv_color_black	8	static
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\lvgl\lvgl/src/core/lv_obj_style.h:205:20:lv_obj_set_style_pad_all	24	static
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\lvgl\lvgl/src/core/lv_disp.h:182:26:lv_scr_act	8	static
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\lvgl\lvgl/src/lv_api_map.h:35:51:lv_task_handler	8	static
+../source/tasks/lvgl_tasks.c:30:6:init_led_pin	24	static
+../source/tasks/lvgl_tasks.c:48:6:LEDTask	24	static
+../source/tasks/lvgl_tasks.c:64:6:UpdatePlantDashboard	80	static
+../source/tasks/lvgl_tasks.c:82:6:DisplayPlant	160	static
+../source/tasks/lvgl_tasks.c:106:6:DisplayImage	96	static
+../source/tasks/lvgl_tasks.c:169:6:DisplayTask	16	static

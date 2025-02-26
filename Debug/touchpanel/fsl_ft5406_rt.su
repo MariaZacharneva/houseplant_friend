@@ -1,0 +1,5 @@
+../touchpanel/fsl_ft5406_rt.c:36:10:FT5406_RT_Init	32	static
+../touchpanel/fsl_ft5406_rt.c:77:10:FT5406_RT_Denit	16	static
+../touchpanel/fsl_ft5406_rt.c:88:17:FT5406_RT_ReadTouchData	16	static
+../touchpanel/fsl_ft5406_rt.c:98:10:FT5406_RT_GetSingleTouch	40	static
+../touchpanel/fsl_ft5406_rt.c:133:10:FT5406_RT_GetMultiTouch	40	static

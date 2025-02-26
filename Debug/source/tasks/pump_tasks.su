@@ -1,0 +1,3 @@
+../source/tasks/pump_tasks.c:19:6:CheckEnableWatering	32	static
+../source/tasks/pump_tasks.c:30:6:ControlPump	16	static
+../source/tasks/pump_tasks.c:34:6:PumpControllerTask	24	static

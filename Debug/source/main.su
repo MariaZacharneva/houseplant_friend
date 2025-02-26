@@ -1,0 +1,6 @@
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\CMSIS/core_cm7.h:2041:22:__NVIC_SetPriority	16	static
+../source/main.c:60:6:BOARD_ReconfigFlexSpiRxBuffer	40	static
+../source/main.c:113:5:main	40	static
+../source/main.c:159:6:vApplicationMallocFailedHook	8	static
+../source/main.c:169:6:vApplicationTickHook	8	static
+../source/main.c:180:6:vApplicationStackOverflowHook	16	static

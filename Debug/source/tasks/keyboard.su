@@ -1,0 +1,4 @@
+../source/tasks/keyboard.c:33:6:MCP23017_Setup_Keypad	8	static
+../source/tasks/keyboard.c:41:6:MCP23017_ScanKeypad	24	static
+../source/tasks/keyboard.c:70:6:Get_T9_Character	32	static
+../source/tasks/keyboard.c:88:6:KeyboardInputTask	56	static

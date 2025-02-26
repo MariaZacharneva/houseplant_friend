@@ -1,0 +1,3 @@
+../source/tasks/wifi_module.c:36:6:LPUART_UserCallback	24	static
+../source/tasks/wifi_module.c:53:6:InitWifi	32	static
+../source/tasks/wifi_module.c:69:6:SendDataTask	48	static

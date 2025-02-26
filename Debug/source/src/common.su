@@ -1,0 +1,13 @@
+../source/src/common.c:20:6:CheckSemaphores	16	static
+../source/src/common.c:34:6:Plants_Init	16	static
+../source/src/common.c:60:5:GetMoisture	24	static
+../source/src/common.c:71:9:SetMoisture	16	static
+../source/src/common.c:81:5:GetMoistureThreshold	24	static
+../source/src/common.c:92:9:SetMoistureThreshold	16	static
+../source/src/common.c:102:10:GetDHT11	24	static
+../source/src/common.c:113:9:SetDHT11	16	static
+../source/src/common.c:123:5:GetTemperature	8	static
+../source/src/common.c:127:5:GetHumidity	8	static
+../source/src/common.c:131:9:SetTemperature	16	static
+../source/src/common.c:135:9:SetHumidity	16	static
+../source/src/common.c:139:6:PrintStackInfo	24	static
