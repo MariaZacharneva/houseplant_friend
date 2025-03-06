@@ -9,6 +9,7 @@
 #define COMMON_H_
 
 #include <stddef.h>
+#include <stdbool.h>
 
 #include "FreeRTOS.h"
 #include "semphr.h"
@@ -54,6 +55,15 @@ uint8_t SetTemperature(int temp);
 
 int GetHumidity();
 uint8_t SetHumidity(int hum);
+
+typedef struct {
+	char key;
+	bool override;
+} Key_t;
+
+extern QueueHandle_t xQueueKeyboard;
+
+extern char key_map[4][4][5];
 
 
 #endif /* TASKS_COMMON_H_ */

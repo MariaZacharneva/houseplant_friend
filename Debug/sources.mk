@@ -80,6 +80,7 @@ lvgl/lvgl/src/widgets \
 source \
 source/src \
 source/tasks \
+source/ui \
 startup \
 touchpanel \
 utilities \

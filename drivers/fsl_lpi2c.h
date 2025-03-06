@@ -31,7 +31,7 @@
 
 /*! @brief Retry times for waiting flag. */
 #ifndef I2C_RETRY_TIMES
-#define I2C_RETRY_TIMES 0U /* Define to zero means keep waiting until the flag is assert/deassert. */
+#define I2C_RETRY_TIMES 5000U /* Define to zero means keep waiting until the flag is assert/deassert. */
 #endif
 
 /*! @brief LPI2C status return codes. */

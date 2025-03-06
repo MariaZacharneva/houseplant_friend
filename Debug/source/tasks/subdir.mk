@@ -5,27 +5,27 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 ../source/tasks/dhg11_tasks.c \
-../source/tasks/freertos_uart.c \
 ../source/tasks/keyboard.c \
 ../source/tasks/lvgl_tasks.c \
 ../source/tasks/pump_tasks.c \
-../source/tasks/sensor_tasks.c 
+../source/tasks/sensor_tasks.c \
+../source/tasks/wifi_tasks.c 
 
 C_DEPS += \
 ./source/tasks/dhg11_tasks.d \
-./source/tasks/freertos_uart.d \
 ./source/tasks/keyboard.d \
 ./source/tasks/lvgl_tasks.d \
 ./source/tasks/pump_tasks.d \
-./source/tasks/sensor_tasks.d 
+./source/tasks/sensor_tasks.d \
+./source/tasks/wifi_tasks.d 
 
 OBJS += \
 ./source/tasks/dhg11_tasks.o \
-./source/tasks/freertos_uart.o \
 ./source/tasks/keyboard.o \
 ./source/tasks/lvgl_tasks.o \
 ./source/tasks/pump_tasks.o \
-./source/tasks/sensor_tasks.o 
+./source/tasks/sensor_tasks.o \
+./source/tasks/wifi_tasks.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -40,7 +40,7 @@ source/tasks/%.o: ../source/tasks/%.c source/tasks/subdir.mk
 clean: clean-source-2f-tasks
 
 clean-source-2f-tasks:
-	-$(RM) ./source/tasks/dhg11_tasks.d ./source/tasks/dhg11_tasks.o ./source/tasks/freertos_uart.d ./source/tasks/freertos_uart.o ./source/tasks/keyboard.d ./source/tasks/keyboard.o ./source/tasks/lvgl_tasks.d ./source/tasks/lvgl_tasks.o ./source/tasks/pump_tasks.d ./source/tasks/pump_tasks.o ./source/tasks/sensor_tasks.d ./source/tasks/sensor_tasks.o
+	-$(RM) ./source/tasks/dhg11_tasks.d ./source/tasks/dhg11_tasks.o ./source/tasks/keyboard.d ./source/tasks/keyboard.o ./source/tasks/lvgl_tasks.d ./source/tasks/lvgl_tasks.o ./source/tasks/pump_tasks.d ./source/tasks/pump_tasks.o ./source/tasks/sensor_tasks.d ./source/tasks/sensor_tasks.o ./source/tasks/wifi_tasks.d ./source/tasks/wifi_tasks.o
 
 .PHONY: clean-source-2f-tasks
 

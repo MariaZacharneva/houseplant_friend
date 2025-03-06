@@ -1,0 +1,10 @@
+C:/Users/Masha/OneDrive/university/thesis/mxp_hello_world_2_lvgl/evkmimxrt1064/lvgl_demo_widgets/lvgl/lvgl/src/misc/lv_color.h:595:26:lv_color_make	16	static
+../source/ui/manager.c:22:12:Green	8	static
+../source/ui/manager.c:26:12:Red	8	static
+../source/ui/manager.c:30:12:Yellow	8	static
+../source/ui/manager.c:34:7:ListenToKeyboard	16	static
+../source/ui/manager.c:43:6:LoadScreen	24	static
+../source/ui/manager.c:51:6:KeyFunc	16	static
+../source/ui/manager.c:75:6:StartTextInput	16	static
+../source/ui/manager.c:80:6:StopTextInput	16	static
+../source/ui/manager.c:85:6:EnterText	24	static

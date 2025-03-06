@@ -27,7 +27,7 @@
 #include "tasks/pump_tasks.h"
 #include "tasks/sensor_tasks.h"
 #include "tasks/dht11_tasks.h"
-#include "tasks/freertos_uart.h"
+#include "tasks/wifi_tasks.h"
 #include "tasks/keyboard.h"
 
 /*******************************************************************************
@@ -112,7 +112,7 @@ void BOARD_ReconfigFlexSpiRxBuffer(void)
  */
 int main(void) {
 
-    *((volatile uint32_t *)0x41044100) = 5;
+     *((volatile uint32_t *)0x41044100) = 5;
 
     BOARD_ConfigMPU();
     BOARD_ReconfigFlexSpiRxBuffer();
@@ -128,9 +128,9 @@ int main(void) {
 
     NVIC_SetPriority(DEMO_UART_RX_TX_IRQn, 5);
     BaseType_t display_stat = pdPASS, sensor_stat = pdPASS,
-    		pump_stat = pdPASS, dht_stat = pdPASS, uart_stat = pdPASS, keyboard_stat = pdPASS;
+    		pump_stat = pdPASS, dht_stat = pdPASS, uart_stat = pdPASS, keyboard_stat = pdPASS, key_input_stat = pdPASS;
 
-	display_stat = xTaskCreate(DisplayTask, "display", configMINIMAL_STACK_SIZE + 800, NULL, tskIDLE_PRIORITY + 2, NULL);
+	display_stat = xTaskCreate(DisplayTask, "display", configMINIMAL_STACK_SIZE + 900, NULL, tskIDLE_PRIORITY + 2, NULL);
 
     sensor_stat = xTaskCreate(UpdateSensorsTask, "sensor", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 3, NULL);
 
@@ -138,9 +138,9 @@ int main(void) {
 
 	dht_stat = xTaskCreate(DHTTask, "dht", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 3, NULL);
 
-    uart_stat =  xTaskCreate(uart_task, "uart", configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 3, NULL);
+    uart_stat =  xTaskCreate(WifiTask, "wifi", configMINIMAL_STACK_SIZE + 600, NULL, tskIDLE_PRIORITY + 3, NULL);
 
-    keyboard_stat =  xTaskCreate(KeyboardInputTask, "keyboard", configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 3, NULL);
+	key_input_stat =  xTaskCreate(KeyboardInputTask, "keyboard_input", configMINIMAL_STACK_SIZE + 250, NULL, tskIDLE_PRIORITY + 4, NULL);
 
     if ((display_stat != pdPASS) ||(sensor_stat != pdPASS) || (pump_stat != pdPASS) ||
     		(dht_stat != pdPASS) || (uart_stat != pdPASS)) {
@@ -150,7 +150,7 @@ int main(void) {
 
     vTaskStartScheduler();
 
-    while (true) {} /* should never get here */
+    while (true) {}
 }
 
 /*!

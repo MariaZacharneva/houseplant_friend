@@ -16,12 +16,13 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "src/lpi2c_func.h"
+#include "src/common.h"
 
 void MCP23017_Setup_Keypad();
 
 char MCP23017_ScanKeypad();
 
-char Get_T9_Character(char key);
+Key_t Get_T9_Character(char key);
 
 void KeyboardInputTask(void *param) ;
 

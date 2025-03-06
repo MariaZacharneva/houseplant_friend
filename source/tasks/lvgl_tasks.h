@@ -17,6 +17,8 @@ void DisplayImage(void);
 
 void DisplayTask(void *param);
 
+void KeyboardTask(void *param);
+
 void LEDTask(void *param);
 
 #endif /* LVGL_TASKS_H_ */

@@ -265,10 +265,14 @@ source/main.o source/main.d: ../source/main.c \
  C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/task.h \
  ../source/src/lpi2c_func.h ../source/tasks/lvgl_tasks.h \
  ../source/tasks/pump_tasks.h ../source/tasks/sensor_tasks.h \
- ../source/tasks/dht11_tasks.h ../source/tasks/freertos_uart.h \
- ../source/tasks/keyboard.h \
+ ../source/tasks/dht11_tasks.h ../source/tasks/wifi_tasks.h \
  C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/queue.h \
- C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/src/lpi2c_func.h
+ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers\freertos/fsl_lpuart_freertos.h \
+ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/event_groups.h \
+ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/timers.h \
+ ../source/tasks/keyboard.h \
+ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/src/lpi2c_func.h \
+ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/src/common.h
 C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/FreeRTOS.h:
 C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/FreeRTOSConfig.h:
 C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/projdefs.h:
@@ -538,7 +542,11 @@ C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\l
 ../source/tasks/pump_tasks.h:
 ../source/tasks/sensor_tasks.h:
 ../source/tasks/dht11_tasks.h:
-../source/tasks/freertos_uart.h:
-../source/tasks/keyboard.h:
+../source/tasks/wifi_tasks.h:
 C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/queue.h:
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers\freertos/fsl_lpuart_freertos.h:
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/event_groups.h:
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\freertos\freertos-kernel\include/timers.h:
+../source/tasks/keyboard.h:
 C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/src/lpi2c_func.h:
+C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\source/src/common.h:

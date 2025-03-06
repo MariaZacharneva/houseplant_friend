@@ -221,19 +221,6 @@
                         <pin_feature name="slew_rate" value="Slow"/>
                      </pin_features>
                   </pin>
-                  <pin peripheral="LCDIF" signal="lcdif_data, 08" pin_num="C10" pin_signal="GPIO_B0_12">
-                     <pin_features>
-                        <pin_feature name="software_input_on" value="Disable"/>
-                        <pin_feature name="hysteresis_enable" value="Enable"/>
-                        <pin_feature name="pull_up_down_config" value="Pull_Up_100K_Ohm"/>
-                        <pin_feature name="pull_keeper_select" value="Pull"/>
-                        <pin_feature name="pull_keeper_enable" value="Enable"/>
-                        <pin_feature name="open_drain" value="Disable"/>
-                        <pin_feature name="speed" value="MHZ_100"/>
-                        <pin_feature name="drive_strength" value="R0_6"/>
-                        <pin_feature name="slew_rate" value="Slow"/>
-                     </pin_features>
-                  </pin>
                   <pin peripheral="LCDIF" signal="lcdif_data, 09" pin_num="D10" pin_signal="GPIO_B0_13">
                      <pin_features>
                         <pin_feature name="software_input_on" value="Disable"/>
@@ -411,6 +398,7 @@
                   <pin peripheral="GPIO1" signal="gpio_io, 19" pin_num="M12" pin_signal="GPIO_AD_B1_03"/>
                   <pin peripheral="LPUART3" signal="RX" pin_num="K10" pin_signal="GPIO_AD_B1_07"/>
                   <pin peripheral="LPUART3" signal="TX" pin_num="J12" pin_signal="GPIO_AD_B1_06"/>
+                  <pin peripheral="LCDIF" signal="lcdif_data, 08" pin_num="C10" pin_signal="GPIO_B0_12"/>
                </pins>
             </function>
             <function name="BOARD_InitSemcPins">

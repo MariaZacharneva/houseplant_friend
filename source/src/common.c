@@ -17,6 +17,15 @@ SemaphoreHandle_t xDHT11ThrMutex;
 
 uint8_t IS_WATERING = 0;
 
+QueueHandle_t xQueueKeyboard;
+
+char key_map[4][4][5] = {
+    {"+", "def3", "abc2", "1"},
+    {"-", "mno6", "jkl5", "ghi4"},
+    {"*", "wxyz9", "tuv8", "pqrs7"},
+    {"#", "]", "0", "["}
+};
+
 void CheckSemaphores() {
 	for (int i = 0; i < NUM_PLANTS; i++) {
 		if(PlantData[i].xMoistSensorMutex == NULL) {
@@ -53,6 +62,12 @@ void Plants_Init() {
 
 	xDHT11ThrMutex = xSemaphoreCreateBinary();
 	xSemaphoreGive(xDHT11ThrMutex);
+
+	xQueueKeyboard = xQueueCreate(32, sizeof(Key_t));
+	 if(xQueueKeyboard == NULL) {
+		 PRINTF("Cannot create keyboard queue");
+		 while (1) {}
+	}
 
 	CheckSemaphores();
 }

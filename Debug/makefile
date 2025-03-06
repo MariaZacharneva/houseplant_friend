@@ -13,6 +13,7 @@ RM := rm -rf
 -include utilities/subdir.mk
 -include touchpanel/subdir.mk
 -include startup/subdir.mk
+-include source/ui/subdir.mk
 -include source/tasks/subdir.mk
 -include source/src/subdir.mk
 -include source/subdir.mk
