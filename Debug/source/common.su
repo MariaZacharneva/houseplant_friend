@@ -1,4 +1,0 @@
-../source/common.c:20:6:CheckSemaphores	16	static
-../source/common.c:36:6:Plants_Init	16	static
-../source/common.c:60:10:GetMoisture	24	static
-../source/common.c:72:10:GetMoistureThreshold	24	static

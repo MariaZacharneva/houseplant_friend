@@ -1,4 +1,0 @@
-../source/tasks/freertos_uart.c:56:10:uart_send_command	16	static
-../source/tasks/freertos_uart.c:65:5:uart_read_byte	24	static
-../source/tasks/freertos_uart.c:85:10:uart_read_response	272	static
-../source/tasks/freertos_uart.c:107:6:uart_task	152	static

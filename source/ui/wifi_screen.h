@@ -7,6 +7,7 @@
 
 #ifndef UI_WIFI_SCREEN_H_
 #define UI_WIFI_SCREEN_H_
+
 #include "lvgl.h"
 #include "manager.h"
 

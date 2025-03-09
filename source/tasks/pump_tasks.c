@@ -17,14 +17,17 @@
 
 
 bool CheckEnableWatering(uint8_t plant) {
-	for (int i = 0; i < 2; i++) {
-		int moistSensorVal = GetMoisture(plant, i);
-		int moistSensorThresh = GetMoistureThreshold(plant, i);
-		if (moistSensorVal > moistSensorThresh) {
-			return false;
-		}
+	int low_th = GetLowThreshold(plant);
+	int high_th = GetHighThreshold(plant);
+	if (low_th < 0 || high_th < 0) {
+		return false;
 	}
-	return true;
+	int sensor1 = GetMoisture(plant, 0);
+	int sensor2 = GetMoisture(plant, 0);
+	if (WATERING & (1 << plant)) {
+		return sensor1 < high_th && sensor2 < high_th;
+	}
+	return sensor1 < low_th && sensor2 < low_th;
 }
 
 void ControlPump(uint8_t pump_num, uint8_t turn_on) {
@@ -35,26 +38,28 @@ void PumpControllerTask(void *param) {
 	for (uint8_t i = 0; i < NUM_PUMPS; i++) {
 		ControlPump(i, 0);
 	}
+
 	while(1) {
-		uint8_t watering = 0;
+		int watering = 0;
 
 		for (uint8_t i = 0; i < NUM_PLANTS; i++) {
-			if (!PlantData[i].enabled) {
+			if (!PlantData[i].active) {
 				continue;
 			}
 			if (CheckEnableWatering(i)) {
 				ControlPump(PlantData[i].pumpId, 1);
-				watering++;
+				SetWateringTime(i, xTaskGetTickCount());
+				watering = watering | (1 << i);
 			} else {
 				ControlPump(PlantData[i].pumpId, 0);
+				watering = watering & ~(1 << i);
 			}
 		}
-		if (watering == 0) {
-			IS_WATERING = false;
+		WATERING = watering;
+		if (WATERING == 0) {
 			vTaskDelay(pdMS_TO_TICKS(2000));
 		} else {
 			// Faster cycles when watering is in process.
-			IS_WATERING = true;
 			vTaskDelay(pdMS_TO_TICKS(100));
 		}
 	}

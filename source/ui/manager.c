@@ -31,6 +31,22 @@ lv_color_t Yellow() {
     return lv_color_make(255, 198, 0);
 }
 
+lv_color_t LightBlue() {
+    return lv_color_make(0xb3, 0xce, 0xe5);
+}
+
+lv_color_t Blue() {
+    return lv_color_make(0x66, 0x99, 0xCC);
+}
+
+lv_color_t DeepBlue() {
+    return lv_color_make(0x00, 0x88, 0x88);
+}
+
+lv_color_t Gray() {
+    return lv_color_make(0xcc, 0xcc, 0xcc);
+}
+
 Key_t ListenToKeyboard() {
 	Key_t key;
 	key.key = '\0';
@@ -72,7 +88,8 @@ char KeyFunc(char key) {
 	}
 }
 
-void StartTextInput(lv_obj_t* text_input) {
+void StartTextInput(lv_obj_t* text_input, int mode) {
+	keyboard_input_mode = mode;
 	text_input_mode = 1;
     lv_obj_add_state(text_input, LV_STATE_FOCUSED);
 }
@@ -83,6 +100,23 @@ void StopTextInput(lv_obj_t* text_input) {
 }
 
 void EnterText(Key_t key, lv_obj_t* text_input) {
+	if (KeyFunc(key.key) == KEY_SELECT) {
+		StopTextInput(text_input);
+		return;
+	}
+	if (KeyFunc(key.key) == KEY_DEL) {
+    	lv_textarea_del_char(text_input);
+		return;
+	}
+    char txt[2] = {key.key, '\0'};
+    if (key.override) {
+    	lv_textarea_del_char(text_input);
+    }
+	lv_textarea_set_cursor_pos(text_input, LV_TEXTAREA_CURSOR_LAST);
+	lv_textarea_add_char(text_input, key.key);
+}
+
+void EnterDigits(Key_t key, lv_obj_t* text_input) {
 	if (KeyFunc(key.key) == KEY_SELECT) {
 		StopTextInput(text_input);
 		return;

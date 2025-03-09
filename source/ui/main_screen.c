@@ -22,6 +22,7 @@
 #include "lvgl.h"
 #include "manager.h"
 #include "src/common.h"
+#include "tasks/ext_clock_tasks.h"
 #include <stdio.h>
 
 Screen_t MainScreen = {MainScreenInit, MainScreenProcess, MainScreenDeinit, &main_screen};
@@ -32,8 +33,10 @@ int main_screen_k = 6;
 lv_obj_t  *main_screen;
 lv_obj_t* temperature_label;
 lv_obj_t* humidity_label;
+lv_obj_t* time_label;
 lv_obj_t* wifi_btn;
 lv_obj_t* plant_btn[4];
+lv_obj_t* moisture_label[4];
 
 void DisplayPlant(int col, int row, lv_obj_t *plant_grid) {
 	int plant_id = row * 2 + col;
@@ -51,18 +54,33 @@ void DisplayPlant(int col, int row, lv_obj_t *plant_grid) {
 	lv_obj_align(plant_label, LV_ALIGN_TOP_LEFT, 0, 0);
 
 	// Add moisture information.
-	lv_obj_t *moisture_label = lv_label_create(cell);
-	char moisture_info[64];
-	snprintf(moisture_info, sizeof(moisture_info), "Moisture: %d%% and %d%%",
-			GetMoisture(plant_id, 0), GetMoisture(plant_id, 1));
-	lv_label_set_text(moisture_label, moisture_info);
-	lv_obj_align(moisture_label, LV_ALIGN_BOTTOM_LEFT, 0, 0);
+	moisture_label[plant_id] = lv_label_create(cell);
+	lv_obj_align(moisture_label[plant_id], LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
     plant_btn[plant_id] = lv_btn_create(cell);
     lv_obj_align(plant_btn[plant_id], LV_ALIGN_RIGHT_MID, 0, 0);
-	lv_obj_set_style_bg_color(plant_btn[plant_id], lv_color_make(0x66, 0x99, 0xCC), 0);
+	lv_obj_set_style_bg_color(plant_btn[plant_id], Blue(), 0);
     lv_obj_t *btn_label = lv_label_create(plant_btn[plant_id]);
     lv_label_set_text(btn_label, "Info");
+}
+
+void ResetPlantsHighlight() {
+	for (int i = 0; i < 4; i++) {
+		if (GetActive(i)) {
+			lv_obj_set_style_bg_color(plant_btn[i], Blue(), 0);
+	    	char moisture_info[64];
+	    	if (WATERING & (1 << i)) {
+	    	     snprintf(moisture_info, sizeof(moisture_info), "WATERING");
+	    	} else {
+		    	snprintf(moisture_info, sizeof(moisture_info), "Moisture: %d%% and %d%%",
+		    			GetMoisture(i, 0), GetMoisture(i, 1));
+	    	}
+	    	lv_label_set_text(moisture_label[i], moisture_info);
+		} else {
+			lv_obj_set_style_bg_color(plant_btn[i], Gray(), 0);
+	    	lv_label_set_text(moisture_label[i], "Inactive");
+		}
+	}
 }
 
 void MainScreenInit(void) {
@@ -85,11 +103,8 @@ void MainScreenInit(void) {
 	lv_obj_set_style_bg_color(common_info, lv_color_make(0xEE, 0xEE, 0xEE), 0);
 	lv_obj_set_style_pad_all(common_info, 10, 0);
 
-	lv_obj_t *time_label = lv_label_create(common_info);
-
-	char time_text[32];
-	snprintf(time_text, sizeof(time_text), "12:00");
-	lv_label_set_text(time_label, time_text);
+	time_label = lv_label_create(common_info);
+	lv_label_set_text(time_label, "---");
 	lv_obj_align(time_label, LV_ALIGN_TOP_LEFT, 0, 0);
 
 	temperature_label = lv_label_create(common_info);
@@ -106,9 +121,9 @@ void MainScreenInit(void) {
 
 	wifi_btn = lv_btn_create(common_info);
 	lv_obj_align(wifi_btn, LV_ALIGN_BOTTOM_RIGHT, 0, 0);
-	lv_obj_set_style_bg_color(wifi_btn, lv_color_make(0x66, 0x99, 0xCC), 0);
+	lv_obj_set_style_bg_color(wifi_btn, Blue(), 0);
 	lv_obj_t *wifi_label = lv_label_create(wifi_btn);
-	lv_label_set_text(wifi_label, "WiFi");
+	lv_label_set_text(wifi_label, "Settings");
 
 	static lv_coord_t plant_grid_rows[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	static lv_coord_t plant_grid_cols[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -122,13 +137,12 @@ void MainScreenInit(void) {
 			DisplayPlant(col, row, plant_grid);
 		}
 	}
+	ResetPlantsHighlight();
 }
 
 void UpdatePlantDashboard(void) {
 	int temp = 8;
 	int hum = 8;
-    char buffer[32];
-    char int_buffer[32];
 
     temp = GetTemperature();
     lv_label_set_text_fmt(temperature_label, "Temperature: %d C", temp);
@@ -136,20 +150,21 @@ void UpdatePlantDashboard(void) {
     hum = GetHumidity();
     lv_label_set_text_fmt(humidity_label, "Humidity: %d%%", hum);
 
+	lv_label_set_text_fmt(time_label, "%04d-%02d-%02d %02d:%02d",
+			global_daytime.year, global_daytime.month, global_daytime.day, global_daytime.hour, global_daytime.min);
+
     lv_obj_invalidate(temperature_label);
     lv_obj_invalidate(humidity_label);
 }
 
 void MainScreen_UpdateSelectionHighlight() {
-	lv_obj_set_style_bg_color(wifi_btn, lv_color_make(0x66, 0x99, 0xCC), 0);
-	for (int i = 0; i < 4; i++) {
-		lv_obj_set_style_bg_color(plant_btn[i], lv_color_make(0x66, 0x99, 0xCC), 0);
-	}
+	lv_obj_set_style_bg_color(wifi_btn, Blue(), 0);
+	ResetPlantsHighlight();
 	int main_screen_focus = focus % 6;
 	if (main_screen_focus > 1 &&  main_screen_focus < 6) {
-		lv_obj_set_style_bg_color(plant_btn[main_screen_focus - 2], lv_color_make(0x00, 0x88, 0x88), 0);
+		lv_obj_set_style_bg_color(plant_btn[main_screen_focus - 2], DeepBlue(), 0);
 	} else if (main_screen_focus == 1) {
-		lv_obj_set_style_bg_color(wifi_btn, lv_color_make(0x00, 0x88, 0x88), 0);
+		lv_obj_set_style_bg_color(wifi_btn, DeepBlue(), 0);
 	}
 }
 
@@ -163,10 +178,14 @@ void MainScreen_ProcessKeyboardInput(char key) {
             break;
         case KEY_SELECT:
         	if (focus == 1) {
-            	LoadScreen(&WifiScreen);
+            	LoadScreen(&SettingsScreen);
         	} else if (focus > 0) {
         		selected_plant = focus - 2;
-            	LoadScreen(&PlantDetailsScreen);
+        		if (GetActive(selected_plant)) {
+                	LoadScreen(&PlantDetailsScreen);
+        		} else {
+                	LoadScreen(&InactivePlantScreen);
+        		}
         	}
             break;
         case KEY_BACK:

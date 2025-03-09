@@ -24,6 +24,9 @@
 
 int ROW, COL;
 
+// 0 for all symbols, 1 for digits only
+int keyboard_input_mode = 0;
+
 void MCP23017_Setup_Keypad() {
     MCP23017_WriteRegister(MCP23017_2_ADDRESS, IODIRB_REG, 0x00);
     MCP23017_WriteRegister(MCP23017_2_ADDRESS, OLATB_REG, 0x00);
@@ -38,18 +41,39 @@ char MCP23017_ScanKeypad() {
 	vTaskDelay(pdMS_TO_TICKS(10));
 
     for (int row = 0; row < 4; row++) {
-    	MCP23017_SetPin(MCP23017_2_ADDRESS, GPB, row, 1);
+    	status_t status;
+    	status = MCP23017_SetPin(MCP23017_2_ADDRESS, GPB, row, 1);
+    	if (status != kStatus_Success) {
+    		PRINTF("----> MCP23017_ScanKeypad error\r\n");
+    	}
+
     	vTaskDelay(pdMS_TO_TICKS(10));
-    	MCP23017_ReadRegister(MCP23017_2_ADDRESS, GPIOA_REG, &value);
+
+    	status = MCP23017_ReadRegister(MCP23017_2_ADDRESS, GPIOA_REG, &value);
+    	if (status != kStatus_Success) {
+    		PRINTF("----> MCP23017_ScanKeypad error\r\n");
+    	}
+
         for (int col = 0; col < 4; col++) {
             while ((value & (1 << col))) {
             	while (value != 0) {
-                    MCP23017_ReadRegister(MCP23017_2_ADDRESS, GPIOA_REG, &value);
+            		status = MCP23017_ReadRegister(MCP23017_2_ADDRESS, GPIOA_REG, &value);
+                	if (status != kStatus_Success) {
+                		PRINTF("----> MCP23017_ScanKeypad error\r\n");
+                	}
             	}
             	vTaskDelay(pdMS_TO_TICKS(10));
-            	MCP23017_SetPin(MCP23017_2_ADDRESS, GPB, row, 0);
+
+            	status = MCP23017_SetPin(MCP23017_2_ADDRESS, GPB, row, 0);
+            	if (status != kStatus_Success) {
+            		PRINTF("----> MCP23017_ScanKeypad error\r\n");
+            	}
+
             	ROW = 3 - row;
             	COL = col;
+            	if (keyboard_input_mode == 1) {
+                    return digit_map[ROW][COL][0];
+            	}
                 return key_map[ROW][COL][0];
             }
         }
@@ -96,12 +120,16 @@ void KeyboardInputTask(void *param) {
         received_char = MCP23017_ScanKeypad();
 
         if (received_char != '\0') {
-            Key_t key = Get_T9_Character(received_char);
+        	Key_t key;
+        	if (keyboard_input_mode == 0) {
+        		key = Get_T9_Character(received_char);
+        	} else {
+        		key.override = false;
+        		key.key = received_char;
+        	}
 
             xQueueSend(xQueueKeyboard, (void*)&key, (TickType_t )0);
         }
-
-//        PrintStackInfo("keyboard");
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }

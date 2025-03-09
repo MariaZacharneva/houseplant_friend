@@ -29,6 +29,7 @@
 #include "tasks/dht11_tasks.h"
 #include "tasks/wifi_tasks.h"
 #include "tasks/keyboard.h"
+#include "tasks/ext_clock_tasks.h"
 
 /*******************************************************************************
  * Definitions
@@ -128,22 +129,25 @@ int main(void) {
 
     NVIC_SetPriority(DEMO_UART_RX_TX_IRQn, 5);
     BaseType_t display_stat = pdPASS, sensor_stat = pdPASS,
-    		pump_stat = pdPASS, dht_stat = pdPASS, uart_stat = pdPASS, keyboard_stat = pdPASS, key_input_stat = pdPASS;
+    		pump_stat = pdPASS, dht_stat = pdPASS, wifi_stat = pdPASS,
+			keyboard_stat = pdPASS, key_input_stat = pdPASS, clock_stat = pdPASS;
 
 	display_stat = xTaskCreate(DisplayTask, "display", configMINIMAL_STACK_SIZE + 900, NULL, tskIDLE_PRIORITY + 2, NULL);
 
-    sensor_stat = xTaskCreate(UpdateSensorsTask, "sensor", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 3, NULL);
+//    sensor_stat = xTaskCreate(UpdateSensorsTask, "sensor", configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 4, NULL);
+//
+//    pump_stat = xTaskCreate(PumpControllerTask, "pump", configMINIMAL_STACK_SIZE + 200, NULL, tskIDLE_PRIORITY + 2, NULL);
+//
+//	dht_stat = xTaskCreate(DHTTask, "dht", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 3, NULL);
 
-    pump_stat = xTaskCreate(PumpControllerTask, "pump", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 2, NULL);
+	clock_stat = xTaskCreate(DS1307_Task, "clock", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 4, NULL);
 
-	dht_stat = xTaskCreate(DHTTask, "dht", configMINIMAL_STACK_SIZE + 50, NULL, tskIDLE_PRIORITY + 3, NULL);
+//    wifi_stat =  xTaskCreate(WifiTask, "wifi", configMINIMAL_STACK_SIZE + 600, NULL, tskIDLE_PRIORITY + 3, NULL);
 
-    uart_stat =  xTaskCreate(WifiTask, "wifi", configMINIMAL_STACK_SIZE + 600, NULL, tskIDLE_PRIORITY + 3, NULL);
-
-	key_input_stat =  xTaskCreate(KeyboardInputTask, "keyboard_input", configMINIMAL_STACK_SIZE + 250, NULL, tskIDLE_PRIORITY + 4, NULL);
+	key_input_stat =  xTaskCreate(KeyboardInputTask, "keyboard_input", configMINIMAL_STACK_SIZE + 500, NULL, tskIDLE_PRIORITY + 4, NULL);
 
     if ((display_stat != pdPASS) ||(sensor_stat != pdPASS) || (pump_stat != pdPASS) ||
-    		(dht_stat != pdPASS) || (uart_stat != pdPASS)) {
+    		(dht_stat != pdPASS) || (wifi_stat != pdPASS) || (clock_stat != pdPASS)) {
 		PRINTF("Failed to create a task");
 		while (true) {}
     }

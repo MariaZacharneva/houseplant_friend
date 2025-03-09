@@ -59,7 +59,7 @@ status_t MCP23017_WriteRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t va
     return LPI2C_WriteData(MCP23017Address, data, sizeof(data));
 }
 
-status_t MCP23017_ReadRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t *value) {
+status_t LPI2C_ReadData(uint8_t MCP23017Address, uint8_t reg, uint8_t *value) {
     status_t status;
 
     // Step 1: Send the register address
@@ -102,7 +102,11 @@ status_t MCP23017_ReadRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t *va
     return status;
 }
 
-void MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool val) {
+status_t MCP23017_ReadRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t *value) {
+    return LPI2C_ReadData(MCP23017Address, reg, value);
+}
+
+status_t MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool val) {
     uint8_t value;
     status_t status;
 
@@ -121,20 +125,20 @@ void MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool va
     status = MCP23017_ReadRegister(MCP23017Address, IODIR, &value);
     if (status != kStatus_Success) {
     	PRINTF("Error in MCP23017_ReadRegister: %d\r\n", status);
-    	return;
+    	return status;
     }
     value &= ~(1 << pin);
     status = MCP23017_WriteRegister(MCP23017Address, IODIR, value);
     if (status != kStatus_Success) {
     	PRINTF("Error in MCP23017_WriteRegister: %d\r\n", status);
-    	return;
+    	return status;
     }
 
     // Step 2: Set the pin HIGH (OLATA)
     status = MCP23017_ReadRegister(MCP23017Address, OLAT, &value);
     if (status != kStatus_Success) {
     	PRINTF("Error in MCP23017_ReadRegister: %d\r\n", status);
-    	return;
+    	return status;
     }
 
     if (val == 1) {
@@ -145,6 +149,7 @@ void MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool va
     status = MCP23017_WriteRegister(MCP23017Address, OLAT, value);
     if (status != kStatus_Success) {
     	PRINTF("Error in MCP23017_WriteRegister: %d\r\n", status);
-    	return;
+    	return status;
     }
+    return kStatus_Success;
 }

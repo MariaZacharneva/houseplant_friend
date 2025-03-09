@@ -1,8 +1,0 @@
-C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers/fsl_clock.h:1408:20:CLOCK_SetMux	24	static
-C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers/fsl_clock.h:1461:20:CLOCK_SetDiv	24	static
-C:\Users\Masha\OneDrive\university\thesis\mxp_hello_world_2_lvgl\evkmimxrt1064\lvgl_demo_widgets\drivers/fsl_lpi2c.h:840:24:LPI2C_MasterRepeatedStart	16	static
-../source/src/lpi2c_func.c:29:6:LPI2C_Init	40	static
-../source/src/lpi2c_func.c:41:10:LPI2C_WriteData	32	static
-../source/src/lpi2c_func.c:57:10:MCP23017_WriteRegister	24	static
-../source/src/lpi2c_func.c:62:10:MCP23017_ReadRegister	24	static
-../source/src/lpi2c_func.c:105:6:MCP23017_SetPin	40	static

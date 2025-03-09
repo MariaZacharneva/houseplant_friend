@@ -125,9 +125,13 @@ void GetTopWifiNetworks(char *at_response) {
 
 AT_ResponseStatus WifiReadResponse(char* response) {
     int index = 0;
-    uint8_t byte;
-    while(1) {
-    	uart_read_byte(&byte);
+    uint8_t byte = 0;
+    int timeout = 20;
+    while(timeout) {
+    	if (uart_read_byte(&byte) == 0) {
+    		timeout--;
+    		continue;
+    	}
 		response[index] = byte;
 		index++;
 		if (strstr(response, "\r\nOK\r\n") != NULL) {
@@ -141,11 +145,16 @@ AT_ResponseStatus WifiReadResponse(char* response) {
 			return AT_ERROR_RESPONSE;
 		}
     }
+	return AT_TIMEOUT;
 }
 
 void WifiInit() {
     uart_config.srcclk = BOARD_DebugConsoleSrcFreq();
     uart_config.base = DEMO_UART;
+    uart_config.tx_timeout_multiplier_ms = 5;
+    uart_config.tx_timeout_constant_ms = 20;
+    uart_config.rx_timeout_multiplier_ms = 5;
+    uart_config.rx_timeout_constant_ms = 20;
 
     if (0 > LPUART_RTOS_Init(&handle, &t_handle, &uart_config))
     {
@@ -160,20 +169,21 @@ void WifiTask(void *pvParameters) {
 	char long_response[1024] = {0};
 
 	xQueueWifiCommand = xQueueCreate(8, sizeof(command));
-	xQueueWifiResponse = xQueueCreate(3, sizeof(long_response));
+	xQueueWifiResponse = xQueueCreate(5, sizeof(long_response));
 
 	while (1) {
 		if (xQueueReceive(xQueueWifiCommand, &command, ( TickType_t ) 0)) {
-			memset(long_response, 0, sizeof long_response);
 			WifiSendCommand(command);
-			WifiReadResponse(long_response);
+		}
+		memset(long_response, 0, sizeof long_response);
+		WifiReadResponse(long_response);
+		if (strstr(long_response, "+CWLAP:") != NULL) {
+			GetTopWifiNetworks(long_response);
+		}
 
-			if (strstr(long_response, "+CWLAP:") != NULL) {
-				GetTopWifiNetworks(long_response);
-			}
-
-			vTaskDelay(10);
-            xQueueSend(xQueueWifiResponse, (void*)&long_response, (TickType_t )0);
+		vTaskDelay(10);
+		if (long_response[0] != '\0') {
+	        xQueueSend(xQueueWifiResponse, (void*)&long_response, (TickType_t )0);
 		}
 		vTaskDelay(200);
 	}

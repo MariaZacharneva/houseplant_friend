@@ -54,7 +54,7 @@ void ListenSensor(uint8_t sensor_num) {
 
 void UpdateSensors() {
 	for (uint8_t p = 0; p < NUM_PLANTS; p++) {
-		if (!PlantData[p].enabled) {
+		if (!PlantData[p].active) {
 			continue;
 		}
 		for (uint8_t i = 0; i < 2; i++) {
@@ -73,6 +73,6 @@ void UpdateSensorsTask(void *param) {
     	UpdateSensors();
 
     	// Updating sensors faster when the watering is in process.
-    	vTaskDelay(pdMS_TO_TICKS(IS_WATERING ? 100 : 1000));
+    	vTaskDelay(pdMS_TO_TICKS(WATERING ? 100 : 1000));
     }
 }

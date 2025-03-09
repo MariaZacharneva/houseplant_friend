@@ -23,10 +23,12 @@ void LPI2C_Init(void);
 
 status_t LPI2C_WriteData(uint8_t slaveAddress, uint8_t *data, size_t dataSize);
 
+status_t LPI2C_ReadData(uint8_t MCP23017Address, uint8_t reg, uint8_t *value);
+
 status_t MCP23017_WriteRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t value);
 
 status_t MCP23017_ReadRegister(uint8_t MCP23017Address, uint8_t reg, uint8_t *value);
 
-void MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool val);
+status_t MCP23017_SetPin(uint8_t MCP23017Address, int8_t group, uint8_t pin, bool val);
 
 #endif /* LPI2C_FUNC_H_ */

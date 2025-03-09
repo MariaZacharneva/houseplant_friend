@@ -31,6 +31,9 @@ typedef struct {
 extern Screen_t MainScreen;
 extern Screen_t WifiScreen;
 extern Screen_t PlantDetailsScreen;
+extern Screen_t InactivePlantScreen;
+extern Screen_t SettingsScreen;
+extern Screen_t TimeScreen;
 
 extern Screen_t* curr_screen;
 
@@ -45,16 +48,18 @@ void LoadScreen(Screen_t *screen);
 
 char KeyFunc(char key);
 
-void StartTextInput(lv_obj_t* text_input);
+void StartTextInput(lv_obj_t* text_input, int mode);
 
 void StopTextInput(lv_obj_t* text_input);
 
 void EnterText(Key_t key, lv_obj_t* text_input);
 
 lv_color_t Green();
-
 lv_color_t Red();
-
 lv_color_t Yellow();
+lv_color_t LightBlue();
+lv_color_t Blue();
+lv_color_t DeepBlue();
+lv_color_t Gray();
 
 #endif /* UI_MANAGER_H_ */

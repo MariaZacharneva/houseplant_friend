@@ -1,6 +1,0 @@
-../source/tasks/wifi_tasks.c:54:10:WifiSendCommand	16	static
-../source/tasks/wifi_tasks.c:62:5:uart_read_byte	24	static
-../source/tasks/wifi_tasks.c:87:6:GetTopWifiNetworks	480	static
-../source/tasks/wifi_tasks.c:126:19:WifiReadResponse	24	static
-../source/tasks/wifi_tasks.c:146:6:WifiInit	8	static
-../source/tasks/wifi_tasks.c:156:6:WifiTask	1168	static

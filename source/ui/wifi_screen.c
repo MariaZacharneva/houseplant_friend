@@ -27,6 +27,7 @@
 Screen_t WifiScreen = {WiFiScreenInit, WiFiScreenProcess, WiFiScreenDeinit, &wifi_screen};
 
 lv_obj_t *wifi_screen;
+
 lv_obj_t *ssid_input;
 lv_obj_t *password_input;
 lv_obj_t *connect_btn;
@@ -76,17 +77,18 @@ void WiFiScreenInit(void) {
 
     lv_obj_t *wifi_label = lv_label_create(header_area);
     lv_label_set_text(wifi_label, "WiFi Settings");
-    lv_obj_align(wifi_label, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_align(wifi_label, LV_ALIGN_LEFT_MID, 0, 0);
 	status_label = lv_label_create(header_area);
 	lv_label_set_text(status_label, "LOADING...");
 	lv_obj_align(status_label, LV_ALIGN_RIGHT_MID, 0, 0);
 
-	static lv_coord_t plant_grid_rows[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
-	static lv_coord_t plant_grid_cols[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static lv_coord_t rows[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
+	static lv_coord_t cols[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
 	lv_obj_t *wifi_grid = lv_obj_create(main_container);
 	lv_obj_set_grid_cell(wifi_grid, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
-	lv_obj_set_grid_dsc_array(wifi_grid, plant_grid_cols, plant_grid_rows);
-	lv_obj_set_style_pad_all(wifi_grid, 5, 0);
+	lv_obj_set_grid_dsc_array(wifi_grid, cols, rows);
+	lv_obj_set_style_border_color(wifi_grid, lv_color_white(), 0);
+	lv_obj_set_style_pad_all(wifi_grid, 0, 0);
 
     wifi_list = lv_list_create(wifi_grid);
 	lv_obj_set_grid_cell(wifi_list, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
@@ -110,17 +112,15 @@ void WiFiScreenInit(void) {
     lv_obj_align(connect_btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 	lv_obj_set_size(connect_btn, lv_pct(50), lv_pct(30));
     lv_obj_t *btn_label = lv_label_create(connect_btn);
+	lv_obj_set_style_bg_color(connect_btn, Blue(), 0);
     lv_label_set_text(btn_label, "Connect");
-
-    char AT_command3[] = "AT+CWLAPOPT=1,6,-90\r\n";
-    xQueueSend(xQueueWifiCommand, (void*)&AT_command3, (TickType_t )0);
 }
 
 void WifiScreen_UpdateSelectionHighlight() {
 	// Default highlight.
 	lv_obj_set_style_bg_color(ssid_input, lv_color_white(), 0);
 	lv_obj_set_style_bg_color(password_input, lv_color_white(), 0);
-	lv_obj_set_style_bg_color(connect_btn, lv_color_make(0x66, 0x99, 0xCC), 0);
+	lv_obj_set_style_bg_color(connect_btn, Blue(), 0);
 	for (int i = 0; i < wifi_count; i++) {
 		if (wifi_btns[i] != NULL) {
 			lv_obj_set_style_bg_color(wifi_btns[i], lv_color_white(), 0);
@@ -135,11 +135,11 @@ void WifiScreen_UpdateSelectionHighlight() {
 			lv_obj_set_style_text_color(wifi_btns[focus - 1], Green(), 0);
 		}
 	} else if (focus == wifi_count + 1) {
-		lv_obj_set_style_bg_color(ssid_input, lv_color_make(0xb3, 0xce, 0xe5), 0);
+		lv_obj_set_style_bg_color(ssid_input, LightBlue(), 0);
 	} else if (focus == wifi_count + 2) {
-		lv_obj_set_style_bg_color(password_input, lv_color_make(0xb3, 0xce, 0xe5), 0);
+		lv_obj_set_style_bg_color(password_input, LightBlue(), 0);
 	} else if (focus == wifi_count + 3) {
-		lv_obj_set_style_bg_color(connect_btn, lv_color_make(0x00, 0x88, 0x88), 0);
+		lv_obj_set_style_bg_color(connect_btn, DeepBlue(), 0);
 	}
 }
 
@@ -164,14 +164,16 @@ void CheckConnection(void) {
 
 void UpdateWifiNetworks() {
     TickType_t current_time = xTaskGetTickCount();
-    if (last_update_time == 0 || current_time - last_update_time > pdMS_TO_TICKS(10000)) {
+    if (last_update_time == 0 || current_time - last_update_time > pdMS_TO_TICKS(6000)) {
     	CheckConnection();
+        char AT_command3[] = "AT+CWLAPOPT=1,6,-90\r\n";
+        xQueueSend(xQueueWifiCommand, (void*)&AT_command3, (TickType_t )0);
+
         char command[] = "AT+CWLAP\r\n";
         xQueueSend(xQueueWifiCommand, (void*)&command, (TickType_t )0);
         last_update_time = current_time;
 
-    	lv_obj_t *loading = lv_list_add_btn(wifi_list, NULL, "loading...");
-    	lv_obj_move_foreground(loading);
+		lv_label_set_text(status_label, "LOADING...");
     }
 }
 
@@ -208,9 +210,9 @@ void WifiScreen_ProcessKeyboardInput(Key_t key) {
         	if (focus >= 1 && focus <= wifi_count) {
         	    lv_textarea_set_text(ssid_input, wifi_networks[focus - 1]);
         	    focus = wifi_count + 2;
-        		StartTextInput(password_input);
+        		StartTextInput(password_input, 0);
         	} else if (focus == ssid_input_focus || focus == password_input_focus) {
-        		StartTextInput(focus == ssid_input_focus ? ssid_input : password_input);
+        		StartTextInput(focus == ssid_input_focus ? ssid_input : password_input, 0);
         	} else if (focus == connect_wifi_focus) {
         		ConnectToWifi();
         	}
@@ -239,12 +241,16 @@ void UpdateWifiNetworksList(char* response) {
         }
         ptr++;
     }
+    if (focus <= wifi_count && focus > count) {
+    	focus = count;
+    }
     wifi_count = count;
 }
 
 void UpdateConnectedNetwork(char* response) {
-	int state;
-    sscanf(response, "AT+CWSTATE?\r\n+CWSTATE:%d,\"%31[^\"]\"", &state, connected_ssid);
+	int state = 0;
+	const char *ptr = strstr(response, "+CWSTATE:");
+    sscanf(ptr, "+CWSTATE:%d,\"%31[^\"]\"", &state, connected_ssid);
     switch (state) {
     case 0:
     	lv_label_set_text(status_label, "NO CONNECTION");
@@ -252,7 +258,9 @@ void UpdateConnectedNetwork(char* response) {
     	break;
     case 1:
     case 2:
-		lv_label_set_text(status_label, "CONNECTED");
+    	char buffer[64];
+    	snprintf(buffer, sizeof(buffer), "CONNECTED: %s", connected_ssid);
+		lv_label_set_text(status_label, buffer);
 		lv_obj_set_style_text_color(status_label, Green(), 0);
     	break;
     case 3:
@@ -274,7 +282,7 @@ void ReadWifiResponse() {
 		} else if (strstr(response, "+CWSTATE:") != NULL) {
 			UpdateConnectedNetwork(response);
 		} else if (strstr(response, "AT+CWLAP\r\n\r\nOK\r\n") != NULL) {
-	    	ResetWifi();
+//	    	ResetWifi();
 		}
 	}
 }
